@@ -1,0 +1,7 @@
+[package]
+name = "c8-disassembler"
+version = "0.1.0"
+authors = ["basti"]
+edition = "2018"
+
+[dependencies]

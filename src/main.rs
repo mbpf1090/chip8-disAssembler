@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::{Read, Error};
+use std::env;
 
 fn read_rom(file_path: &str) -> Result<Vec<u8>, Error> {
     let mut f = File::open(file_path)?;
@@ -23,8 +24,15 @@ fn read_rom(file_path: &str) -> Result<Vec<u8>, Error> {
 
 
 fn main() {
-    let path = "pong.ch8";
-    let rom = match read_rom(path) {
+    let mut args = env::args();
+    args.next();
+
+    let path = match args.next() {
+        Some(path) => path,
+        None => panic!("Please provide a valid path to a CHIP-8 rom!")
+     };
+     
+    let rom = match read_rom(&path) {
         Ok(rom) => rom,
         Err(error) => panic!("There was a problem opening the file: {:?}", error)
     };

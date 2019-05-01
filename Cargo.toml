@@ -5,3 +5,4 @@ authors = ["basti"]
 edition = "2018"
 
 [dependencies]
+cursive = "0.11"

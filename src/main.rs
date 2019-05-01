@@ -2,6 +2,10 @@ use std::fs::File;
 use std::io::{Read, Error};
 use std::env;
 
+use cursive::Cursive;
+use cursive::view::Scrollable;
+use cursive::views::TextView;
+
 mod opcode;
 
 fn read_rom(file_path: &str) -> Result<Vec<u8>, Error> {
@@ -38,8 +42,30 @@ fn main() {
         Ok(rom) => rom,
         Err(error) => panic!("There was a problem opening the file: {:?}", error)
     };
+    let mut content = String::new();
+
+    // Header
+    let header = format!("{:<17} | {:<4} | {:<7} || {}\n", "Bits", "Hex", "Decimal", "Opcode");
+    content.push_str(&header);
+
     for chunk in rom.chunks(2) {
         let opcode = opcode::get_opcode(chunk);
-        println!("{0:08b} {1:08b} | {0:02X}{1:02X} | {0:03} {1:03} || {2}", chunk[0], chunk[1], opcode);
+        let line = format!("{0:08b} {1:08b} | {0:02X}{1:02X} | {0:03} {1:03} || {2}\n", chunk[0], chunk[1], opcode);
+        content.push_str(&line);
     }
+
+    let mut siv = Cursive::default();
+    
+    //Default quit with 'q'
+    siv.add_global_callback('q', |s| s.quit());
+
+    siv.add_layer(TextView::new(content).scrollable());
+
+    siv.run();
+
+    
 }
+
+
+
+

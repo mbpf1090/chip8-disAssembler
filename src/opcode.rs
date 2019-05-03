@@ -4,7 +4,7 @@ pub fn get_opcode(chunk: &[u8]) -> String {
                 let opcode = String::from("EMPTY");
                 return opcode;
             }
-            let nnn = ((chunk[0] as u16) << 8) | (chunk[1] as u16);
+            let nnn = (((chunk[0] as u16) << 8) | (chunk[1] as u16)) & 0x0FFF;
             let n = chunk[1] & 0x0F;
             let x = chunk[0] & 0x0F;
             let y = chunk[1] >> 4;

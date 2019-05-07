@@ -49,9 +49,14 @@ fn main() {
     content.push_str(&header);
 
     for chunk in rom.chunks(2) {
-        let opcode = opcode::get_opcode(chunk);
-        let line = format!("{0:08b} {1:08b} | {0:02X}{1:02X} | {0:03} {1:03} || {2}\n", chunk[0], chunk[1], opcode);
-        content.push_str(&line);
+        if chunk.len() == 2 {
+            let opcode = opcode::get_opcode(chunk);
+            let line = format!("{0:08b} {1:08b} | {0:02X}{1:02X} | {0:03} {1:03} || {2}\n", chunk[0], chunk[1], opcode);
+            content.push_str(&line);
+        } else {
+            let end = opcode::get_opcode(chunk);
+            content.push_str(&end);
+        }
     }
 
     let mut siv = Cursive::default();

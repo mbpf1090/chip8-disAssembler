@@ -45,14 +45,17 @@ fn main() {
     let mut content = String::new();
 
     // Header
-    let header = format!("{:<17} | {:<4} | {:<7} || {}\n", "Bits", "Hex", "Decimal", "Opcode");
+    let header = format!("{:<17} | {:<4} | {:<7} {:<4}|| {}\n", "Bits", "Hex", "Decimal", "RAM", "Opcode");
     content.push_str(&header);
+
+    let mut address = 0x200;
 
     for chunk in rom.chunks(2) {
         if chunk.len() == 2 {
             let opcode = opcode::get_opcode(chunk);
-            let line = format!("{0:08b} {1:08b} | {0:02X}{1:02X} | {0:03} {1:03} || {2}\n", chunk[0], chunk[1], opcode);
+            let line = format!("{0:08b} {1:08b} | {0:02X}{1:02X} | {0:03} {1:03} {3:02X}|| {2}\n", chunk[0], chunk[1], opcode, address);
             content.push_str(&line);
+            address += 2;
         } else {
             let end = opcode::get_opcode(chunk);
             content.push_str(&end);
